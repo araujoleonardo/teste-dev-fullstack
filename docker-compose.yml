@@ -1,0 +1,77 @@
+services:
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app-vue
+    platform: linux/amd64
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      NPM_CONFIG_PRODUCTION: "false"
+    depends_on:
+      - api
+    networks:
+      - fullstack
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api-node
+    platform: linux/amd64
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/www
+      - /www/node_modules
+    environment:
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_USER: "mysql"
+      DB_PASSWORD: "123"
+      DB_NAME: "fullstack"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    platform: linux/amd64
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "fullstack"
+      MYSQL_USER: "mysql"
+      MYSQL_PASSWORD: "123"
+      MYSQL_ROOT_PASSWORD: "123"
+    networks:
+      - fullstack
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    platform: linux/amd64
+    restart: always
+    environment:
+      PMA_HOST: "db"
+      PMA_PORT: "3306"
+      PMA_USER: "root"
+      PMA_PASSWORD: "123"
+    ports:
+      - "8080:80"
+    networks:
+      - fullstack
+
+networks:
+  fullstack:
+    driver: bridge
