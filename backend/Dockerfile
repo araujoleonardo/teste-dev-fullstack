@@ -3,16 +3,17 @@ FROM node:20-alpine
 # Diretório da aplicação
 WORKDIR /www
 
-# Instala as dependências
+# Copia dependências
 COPY package*.json ./
+
+# Instala as dependências
 RUN npm install
 
-# Copia o projeto
-COPY . .
+# Copia o entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expõe a porta
 EXPOSE 3000
 
-# Rodar a aplicação em modo desenvolvimento
-CMD ["npm", "run", "dev"]
-
+# Usa o entrypoint personalizado
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
