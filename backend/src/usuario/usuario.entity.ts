@@ -2,13 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ReceitaEntity } from '../receita/receita.entity';
 
 @Entity({ name: 'usuarios' })
 export class UsuarioEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column({ name: 'nome', length: 100, nullable: false })
@@ -25,4 +27,7 @@ export class UsuarioEntity {
 
   @UpdateDateColumn({ name: 'alterado_em' })
   alteradoEm: string;
+
+  @OneToMany(() => ReceitaEntity, (receita) => receita.usuario)
+  receitas: ReceitaEntity[];
 }
