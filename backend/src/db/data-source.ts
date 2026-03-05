@@ -1,6 +1,9 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { CategoriaEntity } from '../categoria/categoria.entity';
+import { UsuarioEntity } from '../usuario/usuario.entity';
+import { ReceitaEntity } from '../receita/receita.entity';
 
 dotenv.config();
 
@@ -11,6 +14,6 @@ export const dataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  entities: [CategoriaEntity, UsuarioEntity, ReceitaEntity],
   migrations: [__dirname + '/migrations/*.{js,ts}'],
 });
