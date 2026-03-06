@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioModule } from './usuario/usuario.module';
 import { ReceitaModule } from './receita/receita.module';
 import { CategoriaModule } from './categoria/categoria.module';
+import { AuthModule } from './auth/auth.module';
 import { UsuarioEntity } from './usuario/usuario.entity';
 import { CategoriaEntity } from './categoria/categoria.entity';
 import { ReceitaEntity } from './receita/receita.entity';
@@ -27,6 +28,7 @@ import { ReceitaEntity } from './receita/receita.entity';
         synchronize: false,
       }),
     }),
+    AuthModule,
     UsuarioModule,
     ReceitaModule,
     CategoriaModule,

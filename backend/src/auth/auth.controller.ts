@@ -1,0 +1,32 @@
+import { Body, Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/Login.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('login')
+  async login(@Body() data: LoginDto) {
+    return this.authService.login(data);
+  }
+
+  // Todo: Irei implementar revogacao do token depois
+  @UseGuards(JwtAuthGuard) //Rota protegida
+  @Post('logout')
+  logout() {
+    return { message: 'Logout realizado com sucesso' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getMe(@Request() req: {
+    user: {
+      id: number;
+      login: string;
+      nome: string;
+    } }) {
+    return req.user;
+  }
+}

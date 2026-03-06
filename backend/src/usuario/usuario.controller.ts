@@ -1,16 +1,17 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CriarUsuarioDto } from './dto/CriarUsuario.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('usuarios')
 export class UsuarioController {
   constructor(
-    private usuarioRepository: UsuarioService
+    private usuarioService: UsuarioService
   ) {}
 
   @Post()
   async criar(@Body() usuario: CriarUsuarioDto) {
-    const data = await this.usuarioRepository.criar(usuario);
+    const data = await this.usuarioService.criar(usuario);
 
     return {
       usuario: data,
@@ -18,8 +19,10 @@ export class UsuarioController {
     };
   }
 
+  @UseGuards(JwtAuthGuard) //Rota protegida
   @Get()
   async listar() {
-    return await this.usuarioRepository.listar();
+    return await this.usuarioService.listar();
   }
 }
+

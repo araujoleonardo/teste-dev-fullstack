@@ -29,12 +29,6 @@ services:
     volumes:
       - ./backend:/www
       - /www/node_modules
-    environment:
-      DB_HOST: "db"
-      DB_PORT: "3306"
-      DB_USER: "mysql"
-      DB_PASSWORD: "123"
-      DB_NAME: "fullstack"
     depends_on:
       - db
     networks:
