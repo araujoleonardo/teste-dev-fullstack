@@ -5,6 +5,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { ReceitaModule } from './receita/receita.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { AuthModule } from './auth/auth.module';
+import { RedisModule } from './redis/redis.module';
 import { UsuarioEntity } from './usuario/usuario.entity';
 import { CategoriaEntity } from './categoria/categoria.entity';
 import { ReceitaEntity } from './receita/receita.entity';
@@ -28,6 +29,7 @@ import { ReceitaEntity } from './receita/receita.entity';
         synchronize: false,
       }),
     }),
+    RedisModule,
     AuthModule,
     UsuarioModule,
     ReceitaModule,

@@ -12,21 +12,26 @@ export class AuthController {
     return this.authService.login(data);
   }
 
-  // Todo: Irei implementar revogacao do token depois
   @UseGuards(JwtAuthGuard) //Rota protegida
   @Post('logout')
-  logout() {
+  async logout(@Request() req: { headers: { authorization?: string } }) {
+    const token = req.headers.authorization?.replace('Bearer ', '') ?? '';
+    await this.authService.logout(token);
     return { message: 'Logout realizado com sucesso' };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMe(@Request() req: {
-    user: {
-      id: number;
-      login: string;
-      nome: string;
-    } }) {
+  getMe(
+    @Request()
+    req: {
+      user: {
+        id: number;
+        login: string;
+        nome: string;
+      };
+    },
+  ) {
     return req.user;
   }
 }
