@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import {
   UtensilsCrossed,
   Lock,
@@ -8,20 +6,13 @@ import {
 } from 'lucide-vue-next';
 import AppInput from '@/components/AppInput.vue';
 import AppCard from "@/components/AppCard.vue";
+import AppButton from "@/components/AppButton.vue";
+import { useAuthStore } from '@/store/useAuthStore';
 
-const router = useRouter();
+const auth = useAuthStore();
 
-const login = ref('');
-const senha = ref('');
-const error = ref('');
-
-const handleLogin = (e: Event) => {
-  e.preventDefault();
-  if (!login.value || !senha.value) {
-    error.value = 'Por favor, preencha todos os campos.';
-    return;
-  }
-  router.push('/receitas');
+const handleLogin = async () => {
+  await auth.login();
 };
 </script>
 
@@ -48,24 +39,24 @@ const handleLogin = (e: Event) => {
       </div>
 
       <AppCard>
-        <form class="space-y-6" @submit="handleLogin">
+        <form class="space-y-6 m-4" @submit.prevent="handleLogin">
           <AppInput
-            v-model="login"
+            v-model="auth.userForm.login"
             label="Usuário"
             placeholder="Seu nome de usuário"
             :icon="User"
             required
-            :error="error && !login ? 'Usuário é obrigatório' : ''"
+            :error="auth.validate.login?.[0]"
           />
 
           <AppInput
-            v-model="senha"
+            v-model="auth.userForm.senha"
             type="password"
             label="Senha"
             placeholder="••••••••"
             :icon="Lock"
             required
-            :error="error && !senha ? 'Senha é obrigatória' : ''"
+            :error="auth.validate.senha?.[0]"
           />
 
           <div class="flex items-center justify-between">
@@ -87,14 +78,14 @@ const handleLogin = (e: Event) => {
           </div>
 
           <div>
-            <button
-              type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-300 shadow-lg shadow-orange-200/50 disabled:opacity-70 disabled:cursor-not-allowed"
+            <AppButton
+              block
+              :icon="UtensilsCrossed"
+              :loading="auth.isLoading"
+              @click="handleLogin"
             >
-              <span class="flex items-center gap-2">
-                Acessar
-              </span>
-            </button>
+              Acessar
+            </AppButton>
           </div>
         </form>
       </AppCard>
