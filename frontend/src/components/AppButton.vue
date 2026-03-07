@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
 
+type TypesButton = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+type TypesSize = 'sm' | 'md' | 'lg';
+
 interface Props {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: TypesButton;
+  size?: TypesSize;
   loading?: boolean;
   disabled?: boolean;
   icon?: Component;
@@ -63,7 +66,7 @@ const classes = computed(() => {
         class="shrink-0"
         :class="[size === 'sm' ? 'h-3.5 w-3.5' : 'h-5 w-5']"
       />
-      
+
       <slot />
 
       <component

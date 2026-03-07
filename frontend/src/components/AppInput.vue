@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
 
+type InputType = 'text' | 'password' | 'number' | 'email' | 'tel' | 'url';
+
 const props = withDefaults(defineProps <{
-  modelValue: string | number;
+  modelValue?: string | number;
   label?: string;
-  type?: 'text' | 'password' | 'number' | 'email' | 'tel' | 'url';
+  type?: InputType;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;

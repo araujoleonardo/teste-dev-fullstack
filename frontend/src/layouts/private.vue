@@ -8,8 +8,10 @@ import {
   Menu, 
   X,
 } from 'lucide-vue-next';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const router = useRouter();
+const auth = useAuthStore();
 const isMenuOpen = ref(false);
 
 const navItems = [
@@ -17,8 +19,8 @@ const navItems = [
   { name: 'Categorias', path: '/categorias', icon: Tags },
 ];
 
-const logout = () => {
-  router.push('/login');
+const logout = async () => {
+  await auth.logout();
 };
 </script>
 
@@ -58,7 +60,7 @@ const logout = () => {
           <div class="hidden md:flex items-center gap-4">
             <button
               @click="logout"
-              class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+              class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 cursor-pointer"
             >
               <LogOut class="w-4 h-4 mr-2" />
               Sair
@@ -69,7 +71,7 @@ const logout = () => {
           <div class="flex items-center md:hidden">
             <button
               @click="isMenuOpen = !isMenuOpen"
-              class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none"
+              class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none cursor-pointer"
             >
               <Menu v-if="!isMenuOpen" class="block h-6 w-6" />
               <X v-else class="block h-6 w-6" />
@@ -106,7 +108,7 @@ const logout = () => {
           <div class="pt-4 pb-3 border-t border-slate-100 px-4">
             <button
               @click="logout"
-              class="flex w-full items-center px-3 py-3 rounded-md text-base font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+              class="flex w-full items-center px-3 py-3 rounded-md text-base font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer"
             >
               <LogOut class="w-5 h-5 mr-3" />
               Sair
