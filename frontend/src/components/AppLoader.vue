@@ -17,10 +17,10 @@ defineExpose({ visible });
   <transition name="fade">
     <div
       v-if="visible"
-      class="fixed inset-0 z-[9999] flex items-center justify-center bg-background-1/50 backdrop-blur-sm"
+      class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-300/50 backdrop-blur-sm"
     >
       <div class="flex flex-col items-center gap-4">
-        <div class="w-12 h-12 border-4 border-border-1 border-t-primary rounded-full animate-spin"></div>
+        <div class="w-12 h-12 border-4 border-slate-300 border-t-orange-500 rounded-full animate-spin"></div>
         <p class="text-font-2 font-medium">Carregando...</p>
       </div>
     </div>

@@ -5,10 +5,10 @@ export default {
     // Criar overlay
     const overlay = document.createElement("div");
     overlay.className = `
-      absolute inset-0 
-      bg-background-1/30 backdrop-blur-sm
-      rounded-md 
-      flex items-center justify-center 
+      absolute inset-0
+      bg-slate-200/30 backdrop-blur-sm
+      rounded-3xl
+      flex items-center justify-center
       z-10
     `;
 
@@ -16,7 +16,7 @@ export default {
     overlay.innerHTML = `
       <div>
         <div
-          class="inline-block h-5 w-5 border-3 border-border-1 border-t-primary rounded-full animate-spin"
+          class="inline-block h-5 w-5 border-3 border-slate-300 border-t-orange-500 rounded-full animate-spin"
           role="status"
         >
           <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">

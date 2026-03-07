@@ -4,7 +4,7 @@ import type { Component } from 'vue';
 type InputType = 'text' | 'password' | 'number' | 'email' | 'tel' | 'url';
 
 const props = withDefaults(defineProps <{
-  modelValue?: string | number;
+  modelValue: string | number | null | undefined;
   label?: string;
   type?: InputType;
   placeholder?: string;

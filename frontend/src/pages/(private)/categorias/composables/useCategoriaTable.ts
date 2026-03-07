@@ -85,7 +85,6 @@ export default function useCategoriaTable(baseEndpoint: string) {
     showConfirm({
       title: 'Atenção!',
       message: 'Esta ação não poderá ser desfeita. Deseja continuar?',
-
       button: {
         yes: 'Sim',
         no: 'Não',

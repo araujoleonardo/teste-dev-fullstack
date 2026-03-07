@@ -6,6 +6,7 @@ import type {ResponseToken, UserAuth} from '@/types/user-auth';
 import type { ValidationErrors } from '@/types/error-data';
 import {UserAuthModel} from "@/models/UserAuthModel.ts";
 import router from "@/router";
+import {toast} from "@/components/toast/toast.ts";
 
 const TOKEN = 'auth_token';
 const USER = 'auth_user';
@@ -74,7 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = false
     } catch (error: any) {
       validate.value = error.response?.data?.errors || {}
-      console.error('Erro no login:', error?.response?.data || error.message)
+      toast.error('Erro no login:', error?.response?.data || error.message)
       isLoading.value = false
       throw error
     }
@@ -84,7 +85,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await api.post('/auth/logout')
     } catch (error: any) {
-      console.error('Erro no logout:', error?.response?.data || error.message)
+      toast.error('Erro no logout:', error?.response?.data || error.message)
     } finally {
       clear()
       window.location.reload()

@@ -8,7 +8,7 @@ interface Option {
 }
 
 const props = withDefaults(defineProps<{
-  modelValue: string | number | null;
+  modelValue: string | number | null | undefined;
   options: Option[];
   label?: string;
   placeholder?: string;

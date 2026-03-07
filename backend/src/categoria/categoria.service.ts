@@ -80,4 +80,11 @@ export class CategoriaService {
     await this.categoriaRepository.remove(categoria);
     return { message: 'Categoria removida com sucesso' };
   }
+
+  async listarDropdown() {
+    return await this.categoriaRepository.find({
+      select: ['id', 'nome'],
+      order: { nome: 'ASC' },
+    });
+  }
 }

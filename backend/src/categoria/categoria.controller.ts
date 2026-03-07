@@ -34,6 +34,11 @@ export class CategoriaController {
     return await this.categoriaService.listar(queryParams);
   }
 
+  @Get('dropdown')
+  async listarDropdown() {
+    return await this.categoriaService.listarDropdown();
+  }
+
   @Get(':id')
   async buscarPorId(@Param('id') id: number) {
     return await this.categoriaService.buscarPorId(id);
