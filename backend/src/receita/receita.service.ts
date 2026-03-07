@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { ReceitaEntity } from './receita.entity';
 import { CriarReceitaDto } from './dto/CriarReceita.dto';
 import { AtualizarReceitaDto } from './dto/AtualizarReceita.dto';
+import { ListarReceitasQueryDto } from './dto/ListarReceitasQuery.dto';
+import { PaginateResponse } from '../common/interfaces/paginate-response.interface';
 import { UsuarioEntity } from '../usuario/usuario.entity';
 import { CategoriaEntity } from '../categoria/categoria.entity';
 
@@ -47,10 +49,54 @@ export class ReceitaService {
     }
   }
 
-  async listar() {
-    return await this.receitaRepository.find({
-      relations: ['categoria', 'usuario'],
-    });
+  async listar(queryParams: ListarReceitasQueryDto): Promise<PaginateResponse<ReceitaEntity>> {
+    const page = Math.max(Number(queryParams.page) || 1, 1);
+    const pageSize = Math.max(Number(queryParams.page_size) || 10, 1);
+    const search = queryParams.search?.trim();
+    const direction =
+      String(queryParams.direction).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+    const allowedOrderFields: Record<string, string> = {
+      id: 'receita.id',
+      nome: 'receita.nome',
+      tempo_preparo: 'receita.tempoPreparoMinutos',
+      porcoes: 'receita.porcoes',
+      criado_em: 'receita.criado_em',
+    };
+
+    const orderBy = allowedOrderFields[queryParams.field || 'id'] || 'receita.id';
+
+    const qb = this.receitaRepository
+      .createQueryBuilder('receita')
+      .leftJoinAndSelect('receita.categoria', 'categoria')
+      .leftJoinAndSelect('receita.usuario', 'usuario');
+
+    if (search) {
+      qb.andWhere(
+        new Brackets((subQb) => {
+          subQb
+            .where('receita.nome LIKE :search', { search: `%${search}%` })
+            .orWhere('receita.ingredientes LIKE :search', { search: `%${search}%` });
+        }),
+      );
+    }
+
+    qb.orderBy(orderBy, direction)
+      .skip((page - 1) * pageSize)
+      .take(pageSize);
+
+    const [itens, totalItens] = await qb.getManyAndCount();
+
+    return {
+      page,
+      page_size: pageSize,
+      total_itens: totalItens,
+      total_pages: Math.ceil(totalItens / pageSize),
+      itens: itens.map(r => {
+        if (r.usuario) delete r.usuario.senha;
+        return r;
+      }),
+    };
   }
 
   async buscarPorId(id: number) {
@@ -61,6 +107,7 @@ export class ReceitaService {
     if (!receita) {
       throw new NotFoundException('Receita não encontrada');
     }
+    if (receita.usuario) delete receita.usuario.senha;
     return receita;
   }
 

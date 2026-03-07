@@ -19,6 +19,7 @@ export class AuthService {
   async login(data: LoginDto) {
     const usuario = await this.usuarioRepository.findOne({
       where: { login: data.login },
+      select: ['id', 'nome', 'login', 'senha'], // Precisamos do senha explicitamente
     });
 
     if (!usuario) {

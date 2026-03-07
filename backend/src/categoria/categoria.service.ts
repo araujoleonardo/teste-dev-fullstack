@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { CategoriaEntity } from './categoria.entity';
 import { CriarCategoriaDto } from './dto/CriarCategoria.dto';
 import { AtualizarCategoriaDto } from './dto/AtualizarCategoria.dto';
+import { ListarCategoriasQueryDto } from './dto/ListarCategoriasQuery.dto';
+import { PaginateResponse } from '../common/interfaces/paginate-response.interface';
 
 @Injectable()
 export class CategoriaService {
@@ -18,10 +20,41 @@ export class CategoriaService {
     return await this.categoriaRepository.save(categoria);
   }
 
-  async listar() {
-    return await this.categoriaRepository.find({
-      relations: ['receitas'],
-    });
+  async listar(queryParams: ListarCategoriasQueryDto): Promise<PaginateResponse<CategoriaEntity>> {
+    const page = Math.max(Number(queryParams.page) || 1, 1);
+    const pageSize = Math.max(Number(queryParams.page_size) || 10, 1);
+    const search = queryParams.search?.trim();
+    const direction =
+      String(queryParams.direction).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+    const allowedOrderFields: Record<string, string> = {
+      id: 'categoria.id',
+      nome: 'categoria.nome',
+    };
+
+    const orderBy = allowedOrderFields[queryParams.field || 'id'] || 'categoria.id';
+
+    const qb = this.categoriaRepository
+      .createQueryBuilder('categoria')
+      .leftJoinAndSelect('categoria.receitas', 'receitas');
+
+    if (search) {
+      qb.andWhere('categoria.nome LIKE :search', { search: `%${search}%` });
+    }
+
+    qb.orderBy(orderBy, direction)
+      .skip((page - 1) * pageSize)
+      .take(pageSize);
+
+    const [itens, totalItens] = await qb.getManyAndCount();
+
+    return {
+      page,
+      page_size: pageSize,
+      total_itens: totalItens,
+      total_pages: Math.ceil(totalItens / pageSize),
+      itens,
+    };
   }
 
   async buscarPorId(id: number) {

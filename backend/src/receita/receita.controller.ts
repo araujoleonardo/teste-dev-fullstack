@@ -7,11 +7,13 @@ import {
   Post,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ReceitaService } from './receita.service';
 import { CriarReceitaDto } from './dto/CriarReceita.dto';
 import { AtualizarReceitaDto } from './dto/AtualizarReceita.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ListarReceitasQueryDto } from './dto/ListarReceitasQuery.dto';
 
 @Controller('receitas')
 @UseGuards(JwtAuthGuard)
@@ -28,8 +30,8 @@ export class ReceitaController {
   }
 
   @Get()
-  async listar() {
-    return await this.receitaService.listar();
+  async listar(@Query() queryParams: ListarReceitasQueryDto) {
+    return await this.receitaService.listar(queryParams);
   }
 
   @Get(':id')

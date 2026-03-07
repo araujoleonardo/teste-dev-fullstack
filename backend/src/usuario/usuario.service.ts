@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { UsuarioEntity } from './usuario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CriarUsuarioDto } from './dto/CriarUsuario.dto';
-import { ListarUsuarioDTO } from './dto/ListarUsuario.dto';
+import { Brackets, Repository } from 'typeorm';
+import { UsuarioEntity } from './usuario.entity';
+import { ListarUsuariosQueryDto } from './dto/listar-usuarios-query.dto';
+import { PaginateResponse } from '../common/interfaces/paginate-response.interface';
 import * as bcrypt from 'bcrypt';
+import { CriarUsuarioDto } from './dto/CriarUsuario.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -24,24 +25,50 @@ export class UsuarioService {
     return resp;
   }
 
-  async listar(): Promise<ListarUsuarioDTO[]> {
-    const usuarios = await this.usuarioRepository.find({
-      select: {
-        id: true,
-        nome: true,
-        login: true,
-        criadoEm: true,
-        alteradoEm: true,
-      },
-    });
+  async listar(queryParams: ListarUsuariosQueryDto): Promise<PaginateResponse<UsuarioEntity>> {
+    const page = Math.max(Number(queryParams.page) || 1, 1);
+    const pageSize = Math.max(Number(queryParams.page_size) || 10, 1);
+    const search = queryParams.search?.trim();
+    const direction =
+      String(queryParams.direction).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 
-    return usuarios.map((usuario) => ({
-      id: usuario.id,
-      nome: usuario.nome,
-      login: usuario.login,
-      criadoEm: usuario.criadoEm,
-      alteradoEm: usuario.alteradoEm,
-    }));
+    const allowedOrderFields: Record<string, string> = {
+      id: 'usuario.id',
+      nome: 'usuario.nome',
+      login: 'usuario.login',
+      criado_em: 'usuario.criadoEm',
+      alterado_em: 'usuario.alteradoEm',
+    };
+
+    const orderBy = allowedOrderFields[queryParams.field || 'id'] || 'usuario.id';
+
+    const qb = this.usuarioRepository.createQueryBuilder('usuario');
+
+    if (search) {
+      qb.andWhere(
+        new Brackets((subQb) => {
+          subQb
+            .where('usuario.nome LIKE :search', { search: `%${search}%` })
+            .orWhere('usuario.login LIKE :search', { search: `%${search}%` });
+        }),
+      );
+    }
+
+    qb.orderBy(orderBy, direction)
+      .skip((page - 1) * pageSize)
+      .take(pageSize);
+
+    const [itens, totalItens] = await qb.getManyAndCount();
+
+    return {
+      page,
+      page_size: pageSize,
+      total_itens: totalItens,
+      total_pages: Math.ceil(totalItens / pageSize),
+      itens: itens.map(u => {
+        delete u.senha;
+        return u;
+      }),
+    };
   }
 }
-

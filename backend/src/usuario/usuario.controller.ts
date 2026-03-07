@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Query } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CriarUsuarioDto } from './dto/CriarUsuario.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ListarUsuariosQueryDto } from './dto/listar-usuarios-query.dto';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -19,10 +20,9 @@ export class UsuarioController {
     };
   }
 
-  @UseGuards(JwtAuthGuard) //Rota protegida
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async listar() {
-    return await this.usuarioService.listar();
+  async listar(@Query() queryParams: ListarUsuariosQueryDto) {
+    return await this.usuarioService.listar(queryParams);
   }
 }
-

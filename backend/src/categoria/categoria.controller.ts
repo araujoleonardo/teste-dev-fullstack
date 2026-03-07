@@ -7,11 +7,13 @@ import {
   Post,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CategoriaService } from './categoria.service';
 import { CriarCategoriaDto } from './dto/CriarCategoria.dto';
 import { AtualizarCategoriaDto } from './dto/AtualizarCategoria.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ListarCategoriasQueryDto } from './dto/ListarCategoriasQuery.dto';
 
 @Controller('categorias')
 @UseGuards(JwtAuthGuard)
@@ -28,8 +30,8 @@ export class CategoriaController {
   }
 
   @Get()
-  async listar() {
-    return await this.categoriaService.listar();
+  async listar(@Query() queryParams: ListarCategoriasQueryDto) {
+    return await this.categoriaService.listar(queryParams);
   }
 
   @Get(':id')
