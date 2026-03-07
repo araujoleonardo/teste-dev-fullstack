@@ -1,18 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { 
-  UtensilsCrossed, 
-  Lock, 
+import {
+  UtensilsCrossed,
+  Lock,
   User,
 } from 'lucide-vue-next';
+import AppInput from '@/components/AppInput.vue';
+import AppCard from "@/components/AppCard.vue";
 
 const router = useRouter();
 
 const login = ref('');
 const senha = ref('');
+const error = ref('');
 
-const handleLogin = () => {
+const handleLogin = (e: Event) => {
+  e.preventDefault();
+  if (!login.value || !senha.value) {
+    error.value = 'Por favor, preencha todos os campos.';
+    return;
+  }
   router.push('/receitas');
 };
 </script>
@@ -39,41 +47,26 @@ const handleLogin = () => {
         </p>
       </div>
 
-      <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100">
+      <AppCard>
         <form class="space-y-6" @submit="handleLogin">
-          <div>
-            <label for="login" class="block text-sm font-semibold text-slate-700 mb-1 ml-1">Usuário</label>
-            <div class="relative group">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                <User class="h-5 w-5" />
-              </div>
-              <input
-                id="login"
-                v-model="login"
-                type="text"
-                required
-                class="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all duration-200 text-slate-900 sm:text-sm"
-                placeholder="Seu nome de usuário"
-              />
-            </div>
-          </div>
+          <AppInput
+            v-model="login"
+            label="Usuário"
+            placeholder="Seu nome de usuário"
+            :icon="User"
+            required
+            :error="error && !login ? 'Usuário é obrigatório' : ''"
+          />
 
-          <div>
-            <label for="senha" class="block text-sm font-semibold text-slate-700 mb-1 ml-1">Senha</label>
-            <div class="relative group">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                <Lock class="h-5 w-5" />
-              </div>
-              <input
-                id="senha"
-                v-model="senha"
-                type="password"
-                required
-                class="block w-full pl-10 pr-10 py-3 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-white transition-all duration-200 text-slate-900 sm:text-sm"
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
+          <AppInput
+            v-model="senha"
+            type="password"
+            label="Senha"
+            placeholder="••••••••"
+            :icon="Lock"
+            required
+            :error="error && !senha ? 'Senha é obrigatória' : ''"
+          />
 
           <div class="flex items-center justify-between">
             <div class="flex items-center">
@@ -104,10 +97,10 @@ const handleLogin = () => {
             </button>
           </div>
         </form>
-      </div>
+      </AppCard>
 
       <p class="text-center text-sm text-slate-500 mt-6">
-        Ainda não tem uma conta? 
+        Ainda não tem uma conta?
         <a href="#" class="font-semibold text-orange-600 hover:text-orange-500 transition-colors">
           Criar
         </a>
@@ -115,6 +108,7 @@ const handleLogin = () => {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 

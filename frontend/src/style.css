@@ -1,2 +1,48 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+:root {
+  --red: #FF3B30;
+  --orange: #FF9500;
+  --yellow: #FFCC00;
+  --green: #34C759;
+  --mint: #00C7BE;
+  --teal: #30B0C7;
+  --cyan: #32ADE6;
+  --blue: #007AFF;
+  --indigo: #5856D6;
+  --purple: #AF52DE;
+  --pink: #FF2D55;
+  --brown: #A2845E;
+}
+
+@theme {
+  --color-red: var(--red);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+  --color-green: var(--green);
+  --color-mint: var(--mint);
+  --color-teal: var(--teal);
+  --color-cyan: var(--cyan);
+  --color-blue: var(--blue);
+  --color-indigo: var(--indigo);
+  --color-purple: var(--purple);
+  --color-pink: var(--pink);
+  --color-brown: var(--brown);
+
+  --color-primary: var(--blue);
+  --color-success: var(--green);
+  --color-info: var(--cyan);
+  --color-warning: var(--orange);
+  --color-error: var(--red);
+}
+
+@layer base {
+  * {
+      @apply border-gray-200;
+  }
+
+  body {
+      @apply bg-gray-50 text-gray-800;
+  }
+}
