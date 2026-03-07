@@ -13,7 +13,7 @@ RUN npm install
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-EXPOSE 3000
+EXPOSE 4000
 
 # Usa o entrypoint personalizado
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

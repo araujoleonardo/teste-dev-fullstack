@@ -11,7 +11,7 @@ RUN npm install
 COPY . .
 
 # Expor porta do Vite
-EXPOSE 3001
+EXPOSE 3000
 
 # Comando padrão para desenvolvimento
 CMD ["npm", "run", "dev", "--", "--host"]
