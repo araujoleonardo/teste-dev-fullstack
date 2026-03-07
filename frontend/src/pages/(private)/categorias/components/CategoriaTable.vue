@@ -22,6 +22,7 @@ import AppPagination from "@/components/AppPagination.vue";
   handlePerPage,
   handleOpen,
   handleEdit,
+  handleDelete,
   openDialog,
   categoria,
 } = useCategoriaTable('/categorias');
@@ -88,7 +89,7 @@ import AppPagination from "@/components/AppPagination.vue";
                   <AppButton variant="outline" size="sm" @click="handleEdit(item)">
                     Editar
                   </AppButton>
-                  <AppButton variant="danger" size="sm">
+                  <AppButton variant="danger" size="sm" @click="handleDelete(item)">
                     Excluir
                   </AppButton>
                 </div>

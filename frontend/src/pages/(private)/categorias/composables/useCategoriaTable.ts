@@ -3,6 +3,8 @@ import api from "@/services/api.ts";
 import type {Categoria} from "@/types/categoria-data";
 import type {IParams} from "@/types/pagination-data";
 import {PaginateDataModel} from "@/models/PaginateDataModel.ts";
+import {toast} from "@/components/toast/toast.ts";
+import showConfirm from "@/components/confirm/confirm.ts";
 
 export default function useCategoriaTable(baseEndpoint: string) {
   const loading = ref<boolean>(false);
@@ -10,7 +12,7 @@ export default function useCategoriaTable(baseEndpoint: string) {
   const openShow = ref({ isOpen: false });
   const categoria = ref<Categoria|undefined>(undefined);
   const debounceTimeout = ref<number|undefined>(undefined);
-  
+
   const params = reactive<IParams>({
     page: 1,
     page_size: 10,
@@ -23,7 +25,7 @@ export default function useCategoriaTable(baseEndpoint: string) {
 
   const getData = async (page?: number) => {
     loading.value = true;
-    
+
     if (page) {
       params.page = page;
     }
@@ -34,7 +36,7 @@ export default function useCategoriaTable(baseEndpoint: string) {
       });
       Object.assign(dataSet, data);
     } catch (error) {
-      console.error('Não foi possível carregar os dados.');
+      toast.error('Não foi possível carregar os dados.');
     } finally {
       loading.value = false;
     }
@@ -79,6 +81,29 @@ export default function useCategoriaTable(baseEndpoint: string) {
     openDialog.value.isOpen = true;
   };
 
+  const handleDelete = (row: { id:number | string }) => {
+    showConfirm({
+      title: 'Atenção!',
+      message: 'Esta ação não poderá ser desfeita. Deseja continuar?',
+
+      button: {
+        yes: 'Sim',
+        no: 'Não',
+      },
+      callback: async (confirm: boolean) => {
+        if (!confirm) return;
+
+        try {
+          const response = await api.delete(`/categorias/${row.id}`);
+          toast.success(response?.data?.success || 'Categoria excluída com sucesso!');
+          await getData();
+        } catch (error: any) {
+          toast.error(error?.response?.data?.error || 'Não foi possível excluir.');
+        }
+      },
+    });
+  };
+
   onMounted(async () => {
     await getData();
   });
@@ -92,6 +117,7 @@ export default function useCategoriaTable(baseEndpoint: string) {
     handlePerPage,
     handleOpen,
     handleEdit,
+    handleDelete,
     openDialog,
     openShow,
     categoria,

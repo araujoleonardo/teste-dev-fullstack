@@ -3,6 +3,7 @@ import type {ValidationErrors} from "@/types/error-data";
 import api from "@/services/api.ts";
 import type {CategoriaForm, PropsCategoria} from "@/types/categoria-data";
 import {CategoriaModel} from "@/models/CategoriaModel.ts";
+import {toast} from "@/components/toast/toast.ts";
 
 export default function useCategoriaForm(props: PropsCategoria, emit: (event: 'reload') => void) {
   const title = ref<string>('Título');
@@ -22,13 +23,13 @@ export default function useCategoriaForm(props: PropsCategoria, emit: (event: 'r
     loading.value = true
     try {
       const response = await api[method.value](urlSubmit.value, formData)
-      console.log(response?.data?.success || 'Dados cadastrados com sucesso!')
+      toast.success(response?.data?.success || 'Dados cadastrados com sucesso!')
       emit('reload')
       props.handleClose()
     } catch (error: any) {
       validate.value = error.response?.data?.errors || {}
       if (!validate.value || Object.keys(validate.value).length === 0) {
-        console.error('Erro ao salvar, tente mais tarde!')
+        toast.error('Erro ao salvar, tente mais tarde!')
       }
     } finally {
       loading.value = false
