@@ -36,7 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
   function setUser(newUser: UserAuth): void {
     user.value = newUser
     Cookie.add(USER, JSON.stringify(user.value), {
-      seconds: 60 * 60 * 24 * 7, // mesmo tempo do token
+      seconds: 60 * 60 * 24 * 7, // 7 dias
       secure: true,
       sameSite: 'Strict',
     })

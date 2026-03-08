@@ -71,7 +71,7 @@ const {
               <TableHead sortable @click="handleSort('nome')">
                 Nome
               </TableHead>
-              <TableHead sortable @click="handleSort('idCategorias')">
+              <TableHead sortable @click="handleSort('idCategorias')" width="200">
                 Categoria
               </TableHead>
               <TableHead sortable @click="handleSort('tempoPreparoMinutos')" width="140">

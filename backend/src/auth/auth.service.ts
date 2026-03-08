@@ -33,9 +33,12 @@ export class AuthService {
 
     const payload = { sub: usuario.id, login: usuario.login, nome: usuario.nome };
     const token = this.jwtService.sign(payload);
+    const decodedToken = this.jwtService.decode(token) as { exp: number };
+    const expiresIn = decodedToken.exp - Math.floor(Date.now() / 1000);
 
     return {
       access_token: token,
+      expires_in: expiresIn,
       usuario: {
         id: usuario.id,
         nome: usuario.nome,

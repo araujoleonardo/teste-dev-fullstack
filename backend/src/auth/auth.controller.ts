@@ -3,6 +3,7 @@ import { Body, Controller, Post, UseGuards, Request, Get } from '@nestjs/common'
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/Login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { LoginResponseDto } from './dto/LoginResponse.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -11,7 +12,7 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Realizar login e obter token JWT' })
-  @ApiResponse({ status: 201, description: 'Login realizado com sucesso' })
+  @ApiResponse({ status: 201, description: 'Login realizado com sucesso', type: LoginResponseDto })
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   async login(@Body() data: LoginDto) {
     return this.authService.login(data);
