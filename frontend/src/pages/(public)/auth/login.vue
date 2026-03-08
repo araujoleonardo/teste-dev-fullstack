@@ -59,24 +59,6 @@ const handleLogin = async () => {
             :error="auth.validate.senha?.[0]"
           />
 
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-300 rounded cursor-pointer"
-              />
-              <label for="remember-me" class="ml-2 block text-xs text-slate-500 cursor-pointer">
-                Lembrar de mim
-              </label>
-            </div>
-            <div class="text-xs">
-              <a href="#" class="font-medium text-orange-600 hover:text-orange-500 transition-colors">
-                Esqueceu a senha?
-              </a>
-            </div>
-          </div>
-
           <div>
             <AppButton
               block
@@ -92,9 +74,9 @@ const handleLogin = async () => {
 
       <p class="text-center text-sm text-slate-500 mt-6">
         Ainda não tem uma conta?
-        <a href="#" class="font-semibold text-orange-600 hover:text-orange-500 transition-colors">
+        <router-link to="/register" class="font-semibold text-orange-600 hover:text-orange-500 transition-colors">
           Criar
-        </a>
+        </router-link>
       </p>
     </div>
   </div>

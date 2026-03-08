@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   modelValue: string | number;
   label?: string;
   placeholder?: string;

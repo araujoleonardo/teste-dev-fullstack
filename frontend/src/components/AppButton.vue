@@ -4,7 +4,7 @@ import { computed, type Component } from 'vue';
 type TypesButton = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type TypesSize = 'sm' | 'md' | 'lg';
 
-interface Props {
+const props = withDefaults(defineProps<{
   variant?: TypesButton;
   size?: TypesSize;
   loading?: boolean;
@@ -12,9 +12,7 @@ interface Props {
   icon?: Component;
   iconRight?: Component;
   block?: boolean;
-}
-
-const props = withDefaults(defineProps<Props>(), {
+}>(), {
   variant: 'primary',
   size: 'md',
   loading: false,

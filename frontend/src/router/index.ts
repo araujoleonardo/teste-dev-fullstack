@@ -4,6 +4,7 @@ import Receitas from "@/pages/(private)/receitas/receitas.vue";
 import Categorias from "@/pages/(private)/categorias/categorias.vue";
 import Private from "@/layouts/private.vue";
 import Login from "@/pages/(public)/auth/login.vue";
+import Register from "@/pages/(public)/auth/register.vue";
 import authMiddleware from "@/router/middleware";
 import {useLoaderStore} from "@/store/useLoaderStore.ts";
 
@@ -22,6 +23,12 @@ const router = createRouter({
           path: '/login',
           name: 'login',
           component: Login,
+          meta: { guestOnly: true }
+        },
+        {
+          path: '/register',
+          name: 'register',
+          component: Register,
           meta: { guestOnly: true }
         },
       ]

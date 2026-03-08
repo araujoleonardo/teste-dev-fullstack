@@ -26,7 +26,7 @@ export interface ReceitaForm {
   modoPreparo: string;
   ingredientes: string;
   idUsuarios: number | null;
-  idCategorias: number | null;
+  idCategorias?: number;
 }
 
 export interface PropsReceita {

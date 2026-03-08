@@ -15,7 +15,7 @@ export default function useReceitaForm(props: PropsReceita, emit: (event: 'reloa
   const method = ref<"post" | "put">("post");
   const loading = ref<boolean>(false);
   const validate = ref<ValidationErrors>({});
-  
+
   const categorias = ref<Categoria[]>([]);
 
   const formData = reactive<ReceitaForm>(new ReceitaModel());
@@ -39,18 +39,19 @@ export default function useReceitaForm(props: PropsReceita, emit: (event: 'reloa
   const handleSubmit = async (): Promise<void> => {
     loading.value = true
     validate.value = {}
-    
+
     try {
-      // Garante que o usuário logado é o dono se for novo
+      // Garante que o usuário logado é o dono
       if (method.value === 'post') {
         formData.idUsuarios = auth.user?.id ? Number(auth.user.id) : null;
       }
 
+      const { id, ...data } = formData;
       await api[method.value](urlSubmit.value, {
-        ...formData,
-        tempoPreparoMinutos: Number(formData.tempoPreparoMinutos),
-        porcoes: Number(formData.porcoes),
-        idCategorias: Number(formData.idCategorias),
+        ...data,
+        tempoPreparoMinutos: formData.tempoPreparoMinutos ? Number(formData.tempoPreparoMinutos) : null,
+        porcoes: formData.porcoes ? Number(formData.porcoes) : null,
+        idCategorias: formData.idCategorias ? Number(formData.idCategorias) : undefined,
       })
       toast.success(method.value === 'post' ? 'Receita cadastrada com sucesso!' : 'Receita atualizada com sucesso!')
       emit('reload')

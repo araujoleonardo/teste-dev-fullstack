@@ -7,8 +7,8 @@ interface Option {
   value: string | number;
 }
 
-const props = withDefaults(defineProps<{
-  modelValue: string | number | null | undefined;
+withDefaults(defineProps<{
+  modelValue?: string | number;
   options: Option[];
   label?: string;
   placeholder?: string;

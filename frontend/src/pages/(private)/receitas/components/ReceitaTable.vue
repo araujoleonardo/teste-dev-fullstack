@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppCard from "@/components/AppCard.vue";
 import AppInput from "@/components/AppInput.vue";
-import { Search, RefreshCw, Plus, Clock, Users } from "lucide-vue-next";
+import { Search, RefreshCw, Plus, Eye } from "lucide-vue-next";
 import AppTable from "@/components/table/AppTable.vue";
 import TableHeader from "@/components/table/TableHeader.vue";
 import TableRow from "@/components/table/TableRow.vue";
@@ -12,6 +12,7 @@ import AppButton from "@/components/AppButton.vue";
 import useReceitaTable from "@/pages/(private)/receitas/composables/useReceitaTable.ts";
 import AppPagination from "@/components/AppPagination.vue";
 import ReceitaForm from "@/pages/(private)/receitas/components/ReceitaForm.vue";
+import ReceitaDetails from "@/pages/(private)/receitas/components/ReceitaDetails.vue";
 
 const {
   loading,
@@ -22,8 +23,10 @@ const {
   handlePerPage,
   handleOpen,
   handleEdit,
+  handleShow,
   handleDelete,
   openDialog,
+  openShow,
   receita,
 } = useReceitaTable('/receitas');
 </script>
@@ -104,6 +107,9 @@ const {
               </TableCell>
               <TableCell>
                 <div class="flex items-center gap-3">
+                  <AppButton variant="secondary" size="sm" @click="handleShow(item)">
+                    Visualizar
+                  </AppButton>
                   <AppButton variant="outline" size="sm" @click="handleEdit(item)">
                     Editar
                   </AppButton>
@@ -137,6 +143,12 @@ const {
       :tipoForm="openDialog.tipoForm"
       :receita="receita"
       @reload="getData(1)"
+    />
+
+    <ReceitaDetails
+      :visible="openShow.isOpen"
+      :handleClose="() => openShow.isOpen = false"
+      :receita="receita"
     />
   </div>
 </template>

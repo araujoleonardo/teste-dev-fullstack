@@ -87,6 +87,11 @@ export default function useReceitaTable(baseEndpoint: string) {
     openDialog.value.isOpen = true;
   };
 
+  const handleShow = (row: Receita) => {
+    receita.value = row;
+    openShow.value.isOpen = true;
+  };
+
   const handleDelete = (row: Receita) => {
     showConfirm({
       title: 'Atenção!',
@@ -122,6 +127,7 @@ export default function useReceitaTable(baseEndpoint: string) {
     handlePerPage,
     handleOpen,
     handleEdit,
+    handleShow,
     handleDelete,
     openDialog,
     openShow,

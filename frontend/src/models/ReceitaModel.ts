@@ -2,13 +2,13 @@ import type { ReceitaForm } from "@/types/receita-data";
 
 export class ReceitaModel implements ReceitaForm {
   id?: number;
-  nome: string = "";
-  tempoPreparoMinutos: number | null = null;
-  porcoes: number | null = null;
-  modoPreparo: string = "";
-  ingredientes: string = "";
-  idUsuarios: number | null = null;
-  idCategorias: number | null = null;
+  nome: string;
+  tempoPreparoMinutos: number | null;
+  porcoes: number | null;
+  modoPreparo: string;
+  ingredientes: string;
+  idUsuarios: number | null;
+  idCategorias?: number;
 
   constructor(data: Partial<ReceitaForm> = {}) {
     this.id = data.id;
@@ -18,6 +18,6 @@ export class ReceitaModel implements ReceitaForm {
     this.modoPreparo = data.modoPreparo || "";
     this.ingredientes = data.ingredientes || "";
     this.idUsuarios = data.idUsuarios ?? null;
-    this.idCategorias = data.idCategorias ?? null;
+    this.idCategorias = data.idCategorias ?? undefined;
   }
 }
