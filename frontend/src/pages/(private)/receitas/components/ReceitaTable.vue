@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppCard from "@/components/AppCard.vue";
 import AppInput from "@/components/AppInput.vue";
-import { Search, RefreshCw, Plus, Eye } from "lucide-vue-next";
+import { Search, RefreshCw, Plus } from "lucide-vue-next";
 import AppTable from "@/components/table/AppTable.vue";
 import TableHeader from "@/components/table/TableHeader.vue";
 import TableRow from "@/components/table/TableRow.vue";
