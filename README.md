@@ -65,28 +65,25 @@ docker exec -it api-node npm run migration:generate
 Os testes unitários mocam tudo (repositórios, Redis, JWT) e rodam sem depender do banco:
 
 ```bash
-cd backend
-npm run test
+docker exec -it api-node npm run test
 ```
 
-Os testes E2E sobem o NestJS completo com SQLite em memória e um Redis mockado, então também não precisam do Docker:
+Os testes E2E sobem o NestJS completo com SQLite em memória e um Redis mockado:
 
 ```bash
-npm run test:e2e
+docker exec -it api-node npm run test:e2e
 ```
 
 Para mostrar os detalhes:
 
 ```bash
-npm run test:e2e -- --verbose --runInBand
+docker exec -it api-node npm run test:e2e -- --verbose --runInBand
 ```
 
 ### Frontend
 
 ```bash
-cd frontend
-npm run test          # roda uma vez
-npm run test:ui       # abre a UI do vitest no browser
+docker exec -it app-vue npm run test
 ```
 
 ---
