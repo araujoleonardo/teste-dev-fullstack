@@ -14,13 +14,14 @@ Projeto fullstack para gerenciar receitas culinárias. O backend é uma API REST
 
 ## Como rodar
 
-Primeiro, copie o `.env`:
+### Apos clonar o projeto abra na raiz
+Primeiro, copie o `.env` do backend:
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-Depois sobe tudo com Docker:
+Depois sobe tudo com Docker através do docker-compose.yml que se encontra na raiz do rpojeto:
 
 ```bash
 docker compose up -d
