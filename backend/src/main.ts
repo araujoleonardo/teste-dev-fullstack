@@ -2,9 +2,25 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+
+  // Configuracao do swagger
+  const config = new DocumentBuilder()
+    .setTitle('MasterCheff API')
+    .setDescription('Documentação detalhada da API do sistema MasterCheff')
+    .setVersion('1.0')
+    .addTag('auth', 'Autenticação e Sessão')
+    .addTag('categorias', 'Gestão de Categorias')
+    .addTag('receitas', 'Gestão de Receitas')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
